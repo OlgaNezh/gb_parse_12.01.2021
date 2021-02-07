@@ -1,16 +1,19 @@
-# This is a sample Python script.
+from scrapy.crawler import CrawlerProcess
+from scrapy.settings import Settings
+# from gb_parse.spiders.autoyoula import AutoyoulaSpider
+from gb_parse.spiders.hhru import HhruSpider
+from gb_parse.spiders.instagram import InstagramSpider
+from gb_parse.spiders.insta_handshakes import HandshakesSpider
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import dotenv
+import os
+dotenv.load_dotenv('.env')
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    crawl_settings = Settings()
+    crawl_settings.setmodule('gb_parse.settings')
+    crawl_proc = CrawlerProcess(settings=crawl_settings)
+    # crawl_proc.crawl(HhruSpider)
+    # crawl_proc.crawl(InstagramSpider, login=os.getenv('LOGIN'), password=os.getenv('PASSWORD'), user_list=['sevcableport', ], tag_list=['python', ])
+    crawl_proc.crawl(HandshakesSpider, login=os.getenv('LOGIN'), password=os.getenv('PASSWORD'))
+    crawl_proc.start()
